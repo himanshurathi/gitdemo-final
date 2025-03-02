@@ -1,0 +1,38 @@
+name: Trigger Jenkins Job with Crumb
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  trigger-jenkins:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Jenkins Crumb and Trigger Job
+        run: |
+          JENKINS_URL="http://18.232.157.197:8080"
+          USER="admin"
+          API_TOKEN="113c6c26d43528b02cc5e07e772826e49b"
+
+          # Fetch the Crumb Token
+          CRUMB=$(curl -s -u "$USER:$API_TOKEN" "$JENKINS_URL/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)")
+
+          # Extract the Crumb Header Name and Value
+          CRUMB_HEADER=$(echo "$CRUMB" | cut -d ':' -f1)
+          CRUMB_VALUE=$(echo "$CRUMB" | cut -d ':' -f2)
+
+          # Debugging: Print the crumb
+          echo "Crumb Header: $CRUMB_HEADER"
+          echo "Crumb Token Retrieved: $CRUMB_VALUE"
+
+          # If Crumb is empty, fail the job
+          if [[ -z "$CRUMB_VALUE" ]]; then
+            echo "ERROR: Crumb token is empty. Jenkins might be blocking requests."
+            exit 1
+          fi
+
+          # Trigger Jenkins Job with Crumb Token
+          curl -X POST "$JENKINS_URL/job/MyNewJob/buildWithParameters?token=secrettoken&branch=main" \
+            -u "$USER:$API_TOKEN" \
+            -H "$CRUMB_HEADER: $CRUMB_VALUE"

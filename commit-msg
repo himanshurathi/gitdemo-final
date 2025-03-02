@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Read commit message
+MSG=$(cat "$1")
+
+# Check if the commit message contains the word "random" 
+(case-insensitive)
+if echo "$MSG" | grep -i -q "random"; then
+    echo "❌ Commit message contains the forbidden word 
+'random'."
+    exit 1
+fi
+
+# If message is valid, allow commit
+exit 0
+

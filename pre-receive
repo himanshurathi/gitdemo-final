@@ -1,0 +1,7 @@
+#!/bin/sh
+USER=$(git config user.name)
+if [ "$USER" = "bad-user" ]; then
+  echo "❌ Push rejected for $USER."
+  exit 1
+fi
+

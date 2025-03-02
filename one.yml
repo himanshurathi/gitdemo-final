@@ -1,0 +1,59 @@
+name: one
+
+run-name: onerun
+
+on:
+  push:
+    branches:
+      - main
+    # tags:
+    #   - v*
+    # paths:
+    #   - 'one/**'
+
+#   pull-requests:
+#     branches:
+#       - main
+#     branches-ignore:
+#       - feature/*
+
+# schedule:
+#   - cron: '0 0 * * *'
+
+env:
+  var1: "value1"
+
+defaults:
+  run:
+    shell: bash
+    working-directory: .
+
+jobs:
+  job1:
+    name: job1
+    runs-on: ubuntu-latest
+    steps:
+      - name: step1
+        run: echo "step1"
+        # shell: cmd
+      - name: step2
+        run: echo "step2"
+        # shell: cmd
+  job2:
+    name: job2
+    needs: job1
+    runs-on: ubuntu-latest
+    steps:
+      - name: step1
+        run: echo "step1"
+        # shell: cmd
+
+  job3:
+    name: job3
+    # if: {{ always() }}
+    needs: job2
+    runs-on: ubuntu-latest
+    steps:
+      - name: step1
+        run: echo "step1"
+        # shell: cmd

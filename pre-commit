@@ -1,0 +1,6 @@
+#!/bin/sh
+if grep -r "TODO" *; then
+  echo "❌ Commit blocked: Remove TODOs before committing."
+  exit 1
+fi
+
