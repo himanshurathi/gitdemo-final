@@ -11,9 +11,9 @@ jobs:
     steps:
       - name: Fetch Jenkins Crumb and Trigger Job
         run: |
-          JENKINS_URL="http://18.232.157.197:8080"
+          JENKINS_URL="http://3.89.130.35:8080"
           USER="admin"
-          API_TOKEN="113c6c26d43528b02cc5e07e772826e49b"
+          API_TOKEN="1165d204409322ea4340037d2a47dcf2f8"
 
           # Fetch the Crumb Token
           CRUMB=$(curl -s -u "$USER:$API_TOKEN" "$JENKINS_URL/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,\":\",//crumb)")
@@ -33,6 +33,6 @@ jobs:
           fi
 
           # Trigger Jenkins Job with Crumb Token
-          curl -X POST "$JENKINS_URL/job/MyNewJob/buildWithParameters?token=secrettoken&branch=main" \
+          curl -X POST "$JENKINS_URL/job/MyNewJob/buildWithParameters?token=sometoken&branch=main" \
             -u "$USER:$API_TOKEN" \
             -H "$CRUMB_HEADER: $CRUMB_VALUE"
